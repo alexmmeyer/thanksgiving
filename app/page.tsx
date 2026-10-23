@@ -28,10 +28,10 @@ const TILES = [
 export default function Home() {
   return (
     <div className="-mt-5">
-      <section className="relative -mx-4 overflow-hidden bg-gradient-to-b from-cream to-sand px-6 pt-10 pb-0 text-center">
+      <section className="relative -mx-4 overflow-hidden bg-gradient-to-b from-cream to-sand px-6 pt-16 pb-0 text-center">
         <Compass size={48} className="absolute top-4 right-4 text-navy/70" />
-        <p className="caps text-navy/70">The McAfee-Sandefur</p>
-        <h1 className="mt-2 font-script text-[3.6rem] leading-[1.05] text-navy">
+        <p className="caps text-[1.05rem] text-navy/75">The McAfee-Sandefur</p>
+        <h1 className="mt-2 font-script text-[3.6rem] leading-[1.05] text-navy [-webkit-text-stroke:0.9px_currentColor]">
           Thanksgiving Reunion
         </h1>
         <div className="mx-auto mt-3 flex max-w-xs items-center gap-3 text-navy/80">
@@ -40,7 +40,7 @@ export default function Home() {
           <span className="h-px flex-1 bg-navy/40" />
         </div>
         <p className="mt-4 font-serif text-lg">November 25-27</p>
-        <p className="caps mt-1 text-turquoise-deep">Cape San Blas · Florida</p>
+        <p className="caps mt-1.5 text-[1.05rem] text-turquoise-deep">Cape San Blas · Florida</p>
         <WaveDivider className="mt-8 block h-12 w-[calc(100%+3rem)] -mx-6" />
       </section>
 
