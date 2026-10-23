@@ -31,6 +31,6 @@ Without Redis credentials, data is stored in `.data/dev-store.json`. Without a G
 
 6. Deploy.
 
-`npm run seed` only fills collections that are empty, so it's safe to run again. `npm run seed -- --force` replaces the groups and schedule with the starter data. It does not touch dishes, but it clears RSVPs for the replaced events.
+`npm run seed` only fills collections that are empty, so it's safe to run again. It loads the houses, the schedule, and the "things to do" places from `scripts/seed-data.ts`. `npm run seed -- --force` replaces all three with the starter data. It does not touch dishes, but it clears RSVPs for the replaced events.
 
 The map uses Google's `DEMO_MAP_ID`, which Advanced Markers require. Google intends it for testing, so if the pins ever stop showing, create your own Map ID in Google Cloud and swap it into `components/MapView.tsx`.

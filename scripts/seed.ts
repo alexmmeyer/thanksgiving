@@ -1,13 +1,13 @@
 /**
- * Loads the starter groups and schedule.
+ * Loads the starter groups, schedule, and things to do.
  *
  *   npm run seed            only fills collections that are empty
- *   npm run seed -- --force replaces groups and events (RSVPs for removed events are cleared)
+ *   npm run seed -- --force replaces groups, events, and places (RSVPs for removed events are cleared)
  */
 import { geocode } from "../lib/geocode";
 import { dropCollection, KEYS, listRecords, newId, putRecord } from "../lib/redis";
-import { eventInput, type EventItem, type Group } from "../lib/types";
-import { EVENTS, GROUPS } from "./seed-data";
+import { eventInput, type EventItem, type Group, type Place } from "../lib/types";
+import { EVENTS, GROUPS, PLACES } from "./seed-data";
 
 const force = process.argv.includes("--force");
 
@@ -35,6 +35,31 @@ async function seedGroups(): Promise<Group[]> {
     console.log(`groups: added ${group.name} (${group.lat.toFixed(5)}, ${group.lng.toFixed(5)})`);
   }
   return located;
+}
+
+async function seedPlaces() {
+  const existing = await listRecords<Place>(KEYS.places);
+  if (existing.length > 0 && !force) {
+    console.log(`places: ${existing.length} already exist, skipping`);
+    return;
+  }
+
+  let located: Place[];
+  try {
+    located = [];
+    for (const input of PLACES) {
+      located.push({ ...input, ...(await geocode(input.address)), id: newId() });
+    }
+  } catch (err) {
+    console.error(`places: skipped, ${err instanceof Error ? err.message : err}`);
+    return;
+  }
+
+  await dropCollection(KEYS.places);
+  for (const place of located) {
+    await putRecord(KEYS.places, place);
+    console.log(`places: added ${place.name} (${place.lat.toFixed(5)}, ${place.lng.toFixed(5)})`);
+  }
 }
 
 async function seedEvents(groups: Group[]) {
@@ -70,6 +95,7 @@ async function linkMainHouse(events: EventItem[], groups: Group[]) {
 async function main() {
   const groups = await seedGroups();
   await seedEvents(groups);
+  await seedPlaces();
   console.log("Done.");
 }
 

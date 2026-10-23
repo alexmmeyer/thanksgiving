@@ -78,7 +78,7 @@ export default function FoodPage() {
         ))}
       </div>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-[5.6rem] z-20 mx-auto flex max-w-2xl justify-end px-4">
+      <div className="pointer-events-none fixed inset-x-0 bottom-[5.6rem] z-20 lg:bottom-8 mx-auto flex max-w-2xl justify-end px-4">
         <button
           type="button"
           className="btn btn-accent pointer-events-auto shadow-lg"

@@ -16,21 +16,18 @@ export const groupInput = z.object({
   isMainHouse: z.boolean().default(false),
 });
 
-/** "5-ish PM" -> "17:00", "12:00 PM onward" -> "12:00", "Time TBD" -> null. */
-export function deriveSortTime(label: string): string | null {
-  const match = label.match(/(\d{1,2})(?::(\d{2}))?\s*(?:-?ish)?\s*(am|pm)/i);
-  if (!match) return null;
-  let hour = Number(match[1]) % 12;
-  if (match[3].toLowerCase() === "pm") hour += 12;
-  return `${String(hour).padStart(2, "0")}:${match[2] ?? "00"}`;
-}
+export const placeInput = z.object({
+  name: z.string().trim().min(1, "Name is required").max(120),
+  description: z.string().trim().max(2000).default(""),
+  address: z.string().trim().min(1, "Address is required").max(300),
+});
 
-const eventFields = z.object({
+export const eventInput = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a day"),
-  timeLabel: z.string().trim().min(1, "Time is required").max(40),
-  sortTime: z
+  /** 24-hour "HH:MM"; null means the time hasn't been set yet. */
+  time: z
     .string()
-    .regex(/^\d{2}:\d{2}$/)
+    .regex(/^\d{2}:\d{2}$/, "Use a valid time")
     .nullable()
     .optional()
     .transform((v) => v || null),
@@ -44,11 +41,6 @@ const eventFields = z.object({
   details: z.string().trim().max(2000).default(""),
   requiresRsvp: z.boolean().default(false),
 });
-
-export const eventInput = eventFields.transform((e) => ({
-  ...e,
-  sortTime: e.sortTime ?? deriveSortTime(e.timeLabel),
-}));
 
 export const DISH_CATEGORIES = ["app", "salad", "main", "dessert", "other"] as const;
 export const DISH_LABELS = ["gluten-free", "dairy-free", "vegan", "vegetarian", "paleo"] as const;
@@ -77,6 +69,7 @@ export const rsvpInput = z.object({
 });
 
 export type GroupInput = z.infer<typeof groupInput>;
+export type PlaceInput = z.infer<typeof placeInput>;
 export type EventInput = z.infer<typeof eventInput>;
 export type DishInput = z.infer<typeof dishInput>;
 export type RsvpInput = z.infer<typeof rsvpInput>;
@@ -85,15 +78,25 @@ export type DishLabel = (typeof DISH_LABELS)[number];
 export type RsvpResponse = (typeof RSVP_RESPONSES)[number];
 
 export type Group = GroupInput & { id: string; lat: number; lng: number };
+export type Place = PlaceInput & { id: string; lat: number; lng: number };
 export type EventItem = EventInput & { id: string };
 export type Dish = DishInput & { id: string; createdAt: number; ownerId: string };
 export type Rsvp = RsvpInput & { id: string; createdAt: number; ownerId: string };
 
-/** By day, then by time; events with no set time ("Time TBD") lead their day. */
+/** By day, then by time; events with no time set yet go last in their day. */
 export function compareEvents(a: EventItem, b: EventItem) {
   return (
-    a.date.localeCompare(b.date) || (a.sortTime ?? "").localeCompare(b.sortTime ?? "")
+    a.date.localeCompare(b.date) ||
+    (a.time ?? "99:99").localeCompare(b.time ?? "99:99") ||
+    a.title.localeCompare(b.title)
   );
+}
+
+/** "17:30" -> "5:30 PM". Older events may have no `time` field at all. */
+export function formatTime(value: string | null | undefined) {
+  if (!value) return "Time TBD";
+  const [h, m] = value.split(":").map(Number);
+  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 }
 
 /** Formats a YYYY-MM-DD string without letting time zones shift the day. */

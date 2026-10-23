@@ -45,12 +45,11 @@ export function MapIcon(props: IconProps) {
   );
 }
 
-export function DishIcon(props: IconProps) {
+export function TurkeyLegIcon(props: IconProps) {
   return (
     <svg {...base(props)}>
-      <path d="M3 15h18" />
-      <path d="M5 15a7 7 0 0 1 14 0" />
-      <path d="M12 6V4.5M4 18.5h16" />
+      <path d="M15.4 15.63a7.88 6 135 1 1 6.23-6.23 4.5 3.43 135 0 0-6.23 6.23" />
+      <path d="m8.29 12.71-2.6 2.6a2.5 2.5 0 1 0-1.65 4.65A2.5 2.5 0 1 0 8.7 18.3l2.59-2.59" />
     </svg>
   );
 }

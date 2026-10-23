@@ -8,7 +8,7 @@ import { EmptyState, ItemTile, PageTitle } from "@/components/ItemTile";
 import { Modal } from "@/components/Modal";
 import { usePlanner } from "@/components/Providers";
 import { useEvents, useGroups, useRsvpCounts } from "@/lib/hooks";
-import { formatDate, type EventItem, type Group } from "@/lib/types";
+import { compareEvents, formatDate, formatTime, type EventItem, type Group } from "@/lib/types";
 
 type Editing = { mode: "new" } | { mode: "edit"; event: EventItem } | null;
 
@@ -20,7 +20,7 @@ export default function SchedulePage() {
   const [editing, setEditing] = useState<Editing>(null);
 
   const byDay = new Map<string, EventItem[]>();
-  for (const event of events ?? []) {
+  for (const event of [...(events ?? [])].sort(compareEvents)) {
     byDay.set(event.date, [...(byDay.get(event.date) ?? []), event]);
   }
 
@@ -103,7 +103,7 @@ function EventCard({
 
   return (
     <ItemTile onEdit={onEdit}>
-      <p className="caps text-turquoise-deep">{event.timeLabel}</p>
+      <p className="caps text-turquoise-deep">{formatTime(event.time)}</p>
       <h3 className={`mt-1 font-serif text-xl font-bold leading-snug ${onEdit ? "pr-20" : ""}`}>
         {event.title}
       </h3>

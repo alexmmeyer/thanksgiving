@@ -8,7 +8,7 @@ import { Modal } from "@/components/Modal";
 import { usePlanner } from "@/components/Providers";
 import { RsvpForm } from "@/components/RsvpForm";
 import { useEvents, useGroups, useRsvps } from "@/lib/hooks";
-import { formatDate, type PublicRsvp, type RsvpResponse } from "@/lib/types";
+import { formatDate, formatTime, type PublicRsvp, type RsvpResponse } from "@/lib/types";
 
 const SECTIONS: { response: RsvpResponse; title: string; dot: string }[] = [
   { response: "yes", title: "Yes", dot: "bg-palm" },
@@ -52,7 +52,7 @@ export function RsvpView({ eventId }: { eventId: string }) {
 
       <section className="label-card p-5">
         <p className="caps text-turquoise-deep">
-          {formatDate(event.date, "long")} · {event.timeLabel}
+          {formatDate(event.date, "long")} · {formatTime(event.time)}
         </p>
         <h1 className="mt-1 font-serif text-3xl font-bold leading-tight">{event.title}</h1>
         {(event.location || group) && (
@@ -76,10 +76,19 @@ export function RsvpView({ eventId }: { eventId: string }) {
       {event.requiresRsvp ? (
         <button
           type="button"
-          className="btn btn-primary mt-5 w-full text-lg"
+          className="btn btn-primary mt-5 w-full flex-col gap-0 text-lg"
           onClick={() => setEditing({ mode: "new" })}
         >
-          {mine.length > 0 ? "RSVP for someone else" : "RSVP"}
+          {mine.length > 0 ? (
+            <>
+              <span className="text-sm font-normal text-cream/80">
+                You already RSVP&apos;d as {mine.map((r) => r.name).join(", ")}
+              </span>
+              RSVP for someone else
+            </>
+          ) : (
+            "RSVP"
+          )}
         </button>
       ) : (
         <p className="mt-5 text-center text-navy/70">This event isn&apos;t taking RSVPs.</p>

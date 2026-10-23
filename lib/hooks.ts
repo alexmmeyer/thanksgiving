@@ -1,10 +1,11 @@
 "use client";
 
 import useSWR from "swr";
-import type { EventItem, Group, PublicDish, PublicRsvp } from "./types";
+import type { EventItem, Group, Place, PublicDish, PublicRsvp } from "./types";
 
 export const KEYS = {
   groups: "/api/groups",
+  places: "/api/places",
   events: "/api/events",
   dishes: "/api/dishes",
   rsvpCounts: "/api/rsvps",
@@ -12,6 +13,7 @@ export const KEYS = {
 };
 
 export const useGroups = () => useSWR<Group[]>(KEYS.groups);
+export const usePlaces = () => useSWR<Place[]>(KEYS.places);
 export const useEvents = () => useSWR<EventItem[]>(KEYS.events);
 export const useDishes = () => useSWR<PublicDish[]>(KEYS.dishes);
 export const useRsvpCounts = () => useSWR<Record<string, number>>(KEYS.rsvpCounts);

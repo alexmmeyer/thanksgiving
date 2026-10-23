@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Compass } from "@/components/Compass";
-import { CalendarIcon, ChevronRightIcon, DishIcon, MapIcon } from "@/components/icons";
+import { CalendarIcon, ChevronRightIcon, MapIcon, TurkeyLegIcon } from "@/components/icons";
 import { LockButton } from "@/components/LockButton";
 import { WaveDivider } from "@/components/WaveDivider";
 
@@ -14,14 +14,14 @@ const TILES = [
   {
     href: "/where",
     title: "Where Everyone's Staying",
-    blurb: "Map of every house, with directions from wherever you are.",
+    blurb: "Map of every house and fun spots nearby, with directions from wherever you are.",
     Icon: MapIcon,
   },
   {
     href: "/food",
     title: "Thanksgiving Potluck",
     blurb: "See what's on the table and add the dish you're bringing.",
-    Icon: DishIcon,
+    Icon: TurkeyLegIcon,
   },
 ];
 

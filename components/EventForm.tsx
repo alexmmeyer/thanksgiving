@@ -22,7 +22,7 @@ export function EventForm({
   const { busy, error, run } = useSubmit();
   const [form, setForm] = useState({
     date: event?.date ?? REUNION_DAYS[1],
-    timeLabel: event?.timeLabel ?? "",
+    time: event?.time ?? "",
     title: event?.title ?? "",
     location: event?.location ?? "",
     groupId: event?.groupId ?? "",
@@ -37,7 +37,7 @@ export function EventForm({
   function save(e: React.FormEvent) {
     e.preventDefault();
     run(async () => {
-      const body = { ...form, groupId: form.groupId || null };
+      const body = { ...form, time: form.time || null, groupId: form.groupId || null };
       const saved = event
         ? await api<EventItem>(`/api/events/${event.id}`, "PATCH", body)
         : await api<EventItem>("/api/events", "POST", body);
@@ -103,14 +103,15 @@ export function EventForm({
           </label>
           <input
             id="ev-time"
+            type="time"
+            step={300}
             className="field"
-            placeholder="5:30 PM or Time TBD"
-            value={form.timeLabel}
-            onChange={(e) => set("timeLabel", e.target.value)}
-            required
+            value={form.time}
+            onChange={(e) => set("time", e.target.value)}
           />
         </div>
       </div>
+      <p className="-mt-2 text-sm text-navy/60">Leave the time blank to show &ldquo;Time TBD&rdquo;.</p>
 
       <div>
         <label className="field-label" htmlFor="ev-location">

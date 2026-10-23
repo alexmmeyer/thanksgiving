@@ -95,6 +95,7 @@ function db() {
 
 export const KEYS = {
   groups: "groups",
+  places: "places",
   events: "events",
   dishes: "dishes",
   rsvps: (eventId: string) => `rsvps:${eventId}`,
