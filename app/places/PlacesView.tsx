@@ -23,7 +23,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "things", label: "Things to do" },
 ];
 
-export function WhereView() {
+export function PlacesView() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

@@ -33,4 +33,13 @@ Without Redis credentials, data is stored in `.data/dev-store.json`. Without a G
 
 `npm run seed` only fills collections that are empty, so it's safe to run again. It loads the houses, the schedule, and the "things to do" places from `scripts/seed-data.ts`. `npm run seed -- --force` replaces all three with the starter data. It does not touch dishes, but it clears RSVPs for the replaced events.
 
+## Updating the live site from scripts
+
+These log in to the deployed site as a planner and go through its API, so they don't need any Redis or Google credentials locally.
+
+- `npm run sync-schedule` makes the live schedule match `EVENTS` in `scripts/seed-data.ts`. Edit that list, run it once to preview, then add `-- --apply` to make the changes. Events are matched by day and title and edited in place, so RSVPs are kept.
+- `npm run add-places` adds the `PLACES` from `scripts/seed-data.ts` that aren't on the site yet.
+
+Both need `SITE_URL=https://your-site.vercel.app PLANNER_PASSWORD=...` in front of the command.
+
 The map uses Google's `DEMO_MAP_ID`, which Advanced Markers require. Google intends it for testing, so if the pins ever stop showing, create your own Map ID in Google Cloud and swap it into `components/MapView.tsx`.

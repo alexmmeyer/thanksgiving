@@ -9,7 +9,7 @@ import { WaveDivider } from "./WaveDivider";
 const TABS = [
   { href: "/", label: "Home", Icon: HomeIcon },
   { href: "/schedule", label: "Schedule", Icon: CalendarIcon },
-  { href: "/where", label: "Where", Icon: MapIcon },
+  { href: "/places", label: "Places", Icon: MapIcon },
   { href: "/food", label: "Food", Icon: TurkeyLegIcon },
 ] as const;
 

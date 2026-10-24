@@ -111,7 +111,7 @@ function EventCard({
       {locationText &&
         (group ? (
           <Link
-            href={`/where?group=${group.id}`}
+            href={`/places?group=${group.id}`}
             className="mt-1.5 inline-flex items-center gap-1 font-semibold text-turquoise-deep underline decoration-turquoise/50 underline-offset-4"
           >
             <PinIcon size={18} />

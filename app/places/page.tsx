@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { WhereView } from "./WhereView";
+import { PlacesView } from "./PlacesView";
 
-export default function WherePage() {
+export default function PlacesPage() {
   return (
     <Suspense fallback={<p className="text-navy/70">Loading the map...</p>}>
-      <WhereView />
+      <PlacesView />
     </Suspense>
   );
 }

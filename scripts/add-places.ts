@@ -7,52 +7,23 @@
  */
 import type { Place } from "../lib/types";
 import { PLACES } from "./seed-data";
+import { plannerSession, runScript } from "./site";
 
-const site = process.env.SITE_URL?.replace(/\/$/, "");
-const password = process.env.PLANNER_PASSWORD;
-
-async function main() {
-  if (!site || !password) throw new Error("Set SITE_URL and PLANNER_PASSWORD.");
-
-  const login = await fetch(`${site}/api/auth`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password }),
-  });
-  if (!login.ok) throw new Error(`Planner login failed (${login.status}). Check the password.`);
-  const cookie = login.headers
-    .getSetCookie()
-    .map((c) => c.split(";")[0])
-    .join("; ");
-
-  const existing = await fetch(`${site}/api/places`);
-  if (!existing.ok) {
-    throw new Error(`Couldn't load places (${existing.status}). Is the new code deployed yet?`);
-  }
-  const names = new Set(((await existing.json()) as Place[]).map((p) => p.name));
+runScript(async () => {
+  const { api } = await plannerSession();
+  const names = new Set((await api<Place[]>("/api/places")).map((p) => p.name));
 
   for (const place of PLACES) {
     if (names.has(place.name)) {
       console.log(`skipped ${place.name} (already there)`);
       continue;
     }
-    const res = await fetch(`${site}/api/places`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Cookie: cookie },
-      body: JSON.stringify(place),
-    });
-    const body = await res.json().catch(() => null);
-    if (!res.ok) {
-      console.error(`failed ${place.name}: ${body?.error ?? res.status}`);
-      continue;
+    try {
+      const saved = await api<Place>("/api/places", "POST", place);
+      console.log(`added ${saved.name} (${saved.lat.toFixed(5)}, ${saved.lng.toFixed(5)})`);
+    } catch (err) {
+      console.error(`failed ${place.name}: ${err instanceof Error ? err.message : err}`);
     }
-    const saved = body as Place;
-    console.log(`added ${saved.name} (${saved.lat.toFixed(5)}, ${saved.lng.toFixed(5)})`);
   }
   console.log("Done.");
-}
-
-main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
-  process.exit(1);
 });

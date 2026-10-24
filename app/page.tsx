@@ -12,9 +12,9 @@ const TILES = [
     Icon: CalendarIcon,
   },
   {
-    href: "/where",
-    title: "Where Everyone's Staying",
-    blurb: "Map of every house and fun spots nearby, with directions from wherever you are.",
+    href: "/places",
+    title: "Places",
+    blurb: "Where everyone's staying and things to do nearby, with directions from wherever you are.",
     Icon: MapIcon,
   },
   {

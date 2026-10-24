@@ -60,7 +60,7 @@ export function RsvpView({ eventId }: { eventId: string }) {
             <PinIcon size={18} />
             {group ? (
               <Link
-                href={`/where?group=${group.id}`}
+                href={`/places?group=${group.id}`}
                 className="font-semibold text-turquoise-deep underline underline-offset-4"
               >
                 {event.location || group.name}
