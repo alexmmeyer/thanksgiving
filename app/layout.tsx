@@ -47,11 +47,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Providers>
           <header className="sticky top-0 z-20 border-b border-navy/10 bg-cream/90 backdrop-blur">
             <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-2 lg:max-w-5xl lg:gap-6">
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/" aria-label="Home" className="flex items-center">
                 <Compass size={30} className="text-navy" />
-                <span className="font-script text-[1.7rem] leading-none text-navy">
-                  Cape San Blas
-                </span>
               </Link>
               <div className="flex items-center gap-4">
                 <TopNav />
