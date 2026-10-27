@@ -104,31 +104,32 @@ function EventCard({
         {event.title}
       </h3>
 
-      {locationText &&
-        (group ? (
-          <Link
-            href={`/places?group=${group.id}`}
-            className="mt-1.5 inline-flex items-center gap-1 font-semibold text-turquoise-deep underline decoration-turquoise/50 underline-offset-4"
-          >
-            <PinIcon size={18} />
-            {locationText}
-          </Link>
-        ) : (
-          <p className="mt-1.5 flex items-center gap-1 text-navy/75">
-            <PinIcon size={18} />
-            {locationText}
-          </p>
-        ))}
-
-      {event.details && <p className="mt-2 whitespace-pre-line text-navy/85">{event.details}</p>}
-
-      {event.requiresRsvp && (
-        <div className="mt-3 flex justify-end">
-          <Link href={`/rsvp/${event.id}`} className="btn btn-primary">
-            RSVP
-          </Link>
+      {(locationText || event.requiresRsvp) && (
+        <div className="mt-1.5 flex items-center justify-between gap-3">
+          {locationText &&
+            (group ? (
+              <Link
+                href={`/places?group=${group.id}`}
+                className="inline-flex min-w-0 items-center gap-1 font-semibold text-turquoise-deep underline decoration-turquoise/50 underline-offset-4"
+              >
+                <PinIcon size={18} className="shrink-0" />
+                {locationText}
+              </Link>
+            ) : (
+              <p className="flex min-w-0 items-center gap-1 text-navy/75">
+                <PinIcon size={18} className="shrink-0" />
+                {locationText}
+              </p>
+            ))}
+          {event.requiresRsvp && (
+            <Link href={`/rsvp/${event.id}`} className="btn btn-primary ml-auto min-h-10 shrink-0 px-5 py-1.5">
+              RSVP
+            </Link>
+          )}
         </div>
       )}
+
+      {event.details && <p className="mt-2 whitespace-pre-line text-navy/85">{event.details}</p>}
     </ItemTile>
   );
 }
