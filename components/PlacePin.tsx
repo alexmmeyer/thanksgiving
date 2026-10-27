@@ -1,14 +1,15 @@
 import type { Place } from "@/lib/types";
+import { PinName } from "./StarPin";
 
 export function PlacePin({ place, selected }: { place: Place; selected: boolean }) {
   return (
     <div className="flex flex-col items-center" style={{ filter: "drop-shadow(0 2px 3px rgb(30 42 74 / 0.35))" }}>
       <div
-        className={`max-w-44 rounded-md border border-turquoise-deep/60 bg-cream px-2.5 py-1 text-center font-serif text-[13px] leading-tight font-bold text-navy ${
+        className={`w-max max-w-44 rounded-md border border-turquoise-deep/60 bg-cream px-2.5 py-1 text-center font-serif text-[13px] leading-tight font-bold text-navy [overflow-wrap:anywhere] ${
           selected ? "ring-2 ring-turquoise ring-offset-1" : ""
         }`}
       >
-        {place.name}
+        <PinName name={place.name} />
       </div>
       <svg width={24} height={28} viewBox="0 0 24 28" aria-hidden className="-mt-0.5 text-turquoise-deep">
         <path

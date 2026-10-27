@@ -59,8 +59,7 @@ export default function Home() {
         ))}
       </nav>
 
-      <footer className="mt-10 flex items-center justify-between text-sm text-navy/55">
-        <span className="caps text-[0.7rem]">Gulf of Mexico · St. Joseph Bay</span>
+      <footer className="mt-10 flex items-center justify-end text-sm text-navy/55">
         <LockButton />
       </footer>
     </div>

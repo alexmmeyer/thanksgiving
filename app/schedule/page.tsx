@@ -7,7 +7,7 @@ import { PinIcon, PlusIcon } from "@/components/icons";
 import { EmptyState, ItemTile, PageTitle } from "@/components/ItemTile";
 import { Modal } from "@/components/Modal";
 import { usePlanner } from "@/components/Providers";
-import { useEvents, useGroups, useRsvpCounts } from "@/lib/hooks";
+import { useEvents, useGroups } from "@/lib/hooks";
 import { compareEvents, formatDate, formatTime, type EventItem, type Group } from "@/lib/types";
 
 type Editing = { mode: "new" } | { mode: "edit"; event: EventItem } | null;
@@ -16,7 +16,6 @@ export default function SchedulePage() {
   const { planner } = usePlanner();
   const { data: events, error, isLoading } = useEvents();
   const { data: groups = [] } = useGroups();
-  const { data: counts = {} } = useRsvpCounts();
   const [editing, setEditing] = useState<Editing>(null);
 
   const byDay = new Map<string, EventItem[]>();
@@ -55,7 +54,6 @@ export default function SchedulePage() {
                   key={event.id}
                   event={event}
                   group={groups.find((g) => g.id === event.groupId)}
-                  yesCount={counts[event.id] ?? 0}
                   onEdit={planner ? () => setEditing({ mode: "edit", event }) : undefined}
                 />
               ))}
@@ -91,12 +89,10 @@ export default function SchedulePage() {
 function EventCard({
   event,
   group,
-  yesCount,
   onEdit,
 }: {
   event: EventItem;
   group?: Group;
-  yesCount: number;
   onEdit?: () => void;
 }) {
   const locationText = event.location || group?.name;
@@ -127,10 +123,7 @@ function EventCard({
       {event.details && <p className="mt-2 whitespace-pre-line text-navy/85">{event.details}</p>}
 
       {event.requiresRsvp && (
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-navy/10 pt-3">
-          <span className="text-navy/75">
-            {yesCount === 0 ? "No RSVPs yet" : `${yesCount} going`}
-          </span>
+        <div className="mt-3 flex justify-end">
           <Link href={`/rsvp/${event.id}`} className="btn btn-primary">
             RSVP
           </Link>
