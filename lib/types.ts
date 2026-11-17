@@ -47,7 +47,7 @@ export const DISH_LABELS = ["gluten-free", "dairy-free", "vegan", "vegetarian", 
 export const DISH_DAYS = ["wednesday", "thursday"] as const;
 
 export const CATEGORY_NAMES: Record<DishCategory, string> = {
-  app: "Apps",
+  app: "Apps & Sides",
   salad: "Salads",
   main: "Mains",
   dessert: "Desserts",
