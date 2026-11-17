@@ -45,8 +45,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <Providers>
-          <header className="sticky top-0 z-20 border-b border-navy/10 bg-cream/90 backdrop-blur">
-            <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-2 lg:max-w-5xl lg:gap-6">
+          <header className="sticky top-0 z-20 h-(--header-h) border-b border-navy/10 bg-cream/90 backdrop-blur">
+            <div className="mx-auto flex h-full max-w-2xl items-center justify-between gap-3 px-4 lg:max-w-5xl lg:gap-6">
               <Link href="/" aria-label="Home" className="flex items-center">
                 <Compass size={30} className="text-navy" />
               </Link>
@@ -56,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </div>
             </div>
           </header>
-          <main className="mx-auto w-full max-w-2xl flex-1 px-4 pt-5 pb-32 lg:pt-8 lg:pb-16">
+          <main className="mx-auto w-full max-w-2xl flex-1 px-4 pt-5 pb-[calc(8rem+env(safe-area-inset-bottom))] lg:pt-8 lg:pb-16">
             {children}
           </main>
           <BottomNav />

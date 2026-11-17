@@ -20,6 +20,11 @@
   --shadow-card: 0 1px 2px rgb(30 42 74 / 0.08), 0 4px 14px rgb(30 42 74 / 0.08);
 }
 
+:root {
+  /* Sticky bars below the site header use this as their `top`. */
+  --header-h: 3.25rem;
+}
+
 html {
   font-size: 17px;
   -webkit-text-size-adjust: 100%;

@@ -15,7 +15,7 @@ export function CategoryTabs({
     <div
       role="tablist"
       aria-label="Dish categories"
-      className="sticky top-[3.2rem] z-10 -mx-3 flex gap-2 overflow-x-auto bg-cream/95 px-3 py-3 backdrop-blur [scrollbar-width:none] sm:-mx-4 sm:px-4"
+      className="sticky top-(--header-h) z-10 -mx-4 flex gap-2 overflow-x-auto bg-cream/95 px-4 py-3 backdrop-blur [scrollbar-width:none]"
     >
       {DISH_CATEGORIES.map((c) => {
         const selected = c === active;

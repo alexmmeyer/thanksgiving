@@ -50,7 +50,7 @@ export default function FoodPage() {
         id="meal-panel"
         role="tabpanel"
         aria-labelledby={`meal-tab-${day}`}
-        className="relative z-0 -mt-0.5 rounded-b-xl rounded-tr-xl border-2 border-navy/35 bg-cream px-3 pt-1 pb-4 sm:px-4"
+        className="relative z-0 -mx-4 -mt-0.5 border-y-2 border-navy/35 bg-cream px-4 pt-1 pb-4 sm:mx-0 sm:rounded-b-xl sm:rounded-tr-xl sm:border-x-2"
       >
         <CategoryTabs active={category} counts={counts} onChange={setCategory} />
 
@@ -71,7 +71,7 @@ export default function FoodPage() {
             >
               <h2 className="pr-20 font-serif text-lg font-bold leading-snug">
                 {dish.name}
-                <span className="ml-2 font-sans text-sm font-normal text-navy/60">
+                <span className="ml-2 inline-block font-sans text-sm font-normal text-navy/60">
                   {dish.bringer}
                   {dish.mine && <span className="text-navy/45"> · you</span>}
                 </span>
@@ -100,7 +100,7 @@ export default function FoodPage() {
         </div>
       </div>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-[5.6rem] z-20 mx-auto flex max-w-2xl justify-end px-4 lg:bottom-8">
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(5.6rem+env(safe-area-inset-bottom))] z-20 mx-auto flex max-w-2xl justify-end px-4 lg:bottom-8">
         <button
           type="button"
           className="btn btn-accent pointer-events-auto shadow-lg"
