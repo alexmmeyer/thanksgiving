@@ -16,6 +16,7 @@ export async function PATCH(req: NextRequest, ctx: RouteContext<"/api/dishes/[id
   const dish: Dish = {
     ...existing,
     ...parsed.data,
+    description: parsed.data.description ?? existing.description ?? "",
     day: parsed.data.day ?? inferDishDay(existing),
   };
   await putRecord(KEYS.dishes, dish);

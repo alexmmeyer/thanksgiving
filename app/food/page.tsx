@@ -13,7 +13,6 @@ import { useDishes } from "@/lib/hooks";
 import {
   CATEGORY_NAMES,
   DISH_CATEGORIES,
-  DISH_DAY_DETAILS,
   type DishCategory,
   type DishDay,
   type PublicDish,
@@ -33,7 +32,6 @@ export default function FoodPage() {
     DISH_CATEGORIES.map((c) => [c, dayDishes.filter((d) => d.category === c).length]),
   ) as Record<DishCategory, number>;
   const shown = dayDishes.filter((d) => d.category === category);
-  const detail = DISH_DAY_DETAILS[day];
 
   function selectDay(next: DishDay) {
     setDay(next);
@@ -52,11 +50,8 @@ export default function FoodPage() {
         id="meal-panel"
         role="tabpanel"
         aria-labelledby={`meal-tab-${day}`}
-        className="relative z-0 -mt-0.5 rounded-b-xl rounded-tr-xl border-2 border-navy/35 bg-cream px-3 pt-4 pb-4 sm:px-4"
+        className="relative z-0 -mt-0.5 rounded-b-xl rounded-tr-xl border-2 border-navy/35 bg-cream px-3 pt-1 pb-4 sm:px-4"
       >
-        <h1 className="font-serif text-3xl font-bold">{detail.title}</h1>
-        <p className="mt-1 mb-1 text-navy/80">{detail.blurb}</p>
-
         <CategoryTabs active={category} counts={counts} onChange={setCategory} />
 
         {isLoading && <p className="mt-4 text-navy/70">Loading the menu...</p>}
@@ -64,11 +59,9 @@ export default function FoodPage() {
           <p className="mt-4 text-coral">Couldn&apos;t load the menu. Please refresh the page.</p>
         )}
 
-        <div role="tabpanel" className="mt-3 grid gap-3 sm:grid-cols-2">
+        <div role="tabpanel" className="mt-3 grid gap-3">
           {!isLoading && shown.length === 0 && (
-            <div className="sm:col-span-2">
-              <EmptyState>No {CATEGORY_NAMES[category].toLowerCase()} yet. Be the first!</EmptyState>
-            </div>
+            <EmptyState>No {CATEGORY_NAMES[category].toLowerCase()} yet. Be the first!</EmptyState>
           )}
           {shown.map((dish) => (
             <ItemTile
@@ -76,11 +69,16 @@ export default function FoodPage() {
               className="bg-white"
               onEdit={dish.mine || planner ? () => setEditing({ mode: "edit", dish }) : undefined}
             >
-              <h2 className="pr-20 font-serif text-lg font-bold leading-snug">{dish.name}</h2>
-              <p className="mt-0.5 text-navy/75">
-                {dish.bringer}
-                {dish.mine && <span className="text-navy/55"> · you</span>}
-              </p>
+              <h2 className="pr-20 font-serif text-lg font-bold leading-snug">
+                {dish.name}
+                <span className="ml-2 font-sans text-sm font-normal text-navy/60">
+                  {dish.bringer}
+                  {dish.mine && <span className="text-navy/45"> · you</span>}
+                </span>
+              </h2>
+              {dish.description && (
+                <p className="mt-1 whitespace-pre-wrap text-navy/80">{dish.description}</p>
+              )}
               {dish.labels.length > 0 && (
                 <ul className="mt-2.5 flex flex-wrap gap-1.5">
                   {dish.labels.map((label) => (

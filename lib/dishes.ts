@@ -22,7 +22,9 @@ export function inferDishDay(dish: { id?: string; name?: string; day?: string | 
 }
 
 /** Fill in a night for dishes saved before the food page had two tabs. */
-export function withDishDay(dish: Dish & { day?: DishDay }): Dish {
+export function withDishDay(dish: Dish & { day?: DishDay; description?: string }): Dish {
   const day = inferDishDay(dish);
-  return dish.day === day ? dish : { ...dish, day };
+  const description = dish.description ?? "";
+  if (dish.day === day && dish.description === description) return dish as Dish;
+  return { ...dish, day, description };
 }

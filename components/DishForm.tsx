@@ -33,6 +33,7 @@ export function DishForm({
   const { mutate } = useSWRConfig();
   const { busy, error, run } = useSubmit();
   const [name, setName] = useState(dish?.name ?? "");
+  const [description, setDescription] = useState(dish?.description ?? "");
   const [bringer, setBringer] = useState(() => dish?.bringer ?? rememberedName());
   const [day, setDay] = useState<DishDay>(dish?.day ?? defaultDay);
   const [category, setCategory] = useState<DishCategory>(dish?.category ?? defaultCategory);
@@ -47,7 +48,7 @@ export function DishForm({
   function save(e: React.FormEvent) {
     e.preventDefault();
     run(async () => {
-      const body = { name, bringer, category, labels, day };
+      const body = { name, description, bringer, category, labels, day };
       const saved = dish
         ? await api<PublicDish>(`/api/dishes/${dish.id}`, "PATCH", body)
         : await api<PublicDish>("/api/dishes", "POST", body);
@@ -83,6 +84,20 @@ export function DishForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+        />
+      </div>
+
+      <div>
+        <label className="field-label" htmlFor="dish-description">
+          Description <span className="font-normal text-navy/60">(optional)</span>
+        </label>
+        <textarea
+          id="dish-description"
+          className="field min-h-24"
+          placeholder="What's in it, or anything else people should know"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          maxLength={500}
         />
       </div>
 

@@ -54,26 +54,14 @@ export const CATEGORY_NAMES: Record<DishCategory, string> = {
   other: "Other",
 };
 
-export const DISH_DAY_DETAILS: Record<
-  DishDay,
-  { tab: string; note: string; title: string; blurb: string }
-> = {
-  wednesday: {
-    tab: "Wednesday",
-    note: "Chili cookoff",
-    title: "Chili cookoff",
-    blurb: "Chili, cornbread, and anything else for Wednesday night. Add yours so we can see what's coming.",
-  },
-  thursday: {
-    tab: "Thursday",
-    note: "Potluck",
-    title: "Thanksgiving potluck",
-    blurb: "Everyone's bringing something! Add your dish so we can see what's on the table.",
-  },
+export const DISH_DAY_DETAILS: Record<DishDay, { tab: string; note: string }> = {
+  wednesday: { tab: "Wednesday", note: "Chili cookoff" },
+  thursday: { tab: "Thursday", note: "Potluck" },
 };
 
 export const dishInput = z.object({
   name: z.string().trim().min(1, "Dish name is required").max(120),
+  description: z.string().trim().max(500).optional(),
   bringer: z.string().trim().min(1, "Tell us who's bringing it").max(120),
   category: z.enum(DISH_CATEGORIES),
   labels: z.array(z.enum(DISH_LABELS)).default([]),
@@ -102,11 +90,12 @@ export type RsvpResponse = (typeof RSVP_RESPONSES)[number];
 export type Group = GroupInput & { id: string; lat: number; lng: number };
 export type Place = PlaceInput & { id: string; lat: number; lng: number };
 export type EventItem = EventInput & { id: string };
-export type Dish = Omit<DishInput, "day"> & {
+export type Dish = Omit<DishInput, "day" | "description"> & {
   id: string;
   createdAt: number;
   ownerId: string;
   day: DishDay;
+  description: string;
 };
 export type Rsvp = RsvpInput & { id: string; createdAt: number; ownerId: string };
 

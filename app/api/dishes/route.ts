@@ -6,7 +6,7 @@ import { inferDishDay, withDishDay } from "@/lib/dishes";
 import { dishInput, type Dish } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
-  const stored = await listRecords<Dish & { day?: Dish["day"] }>(KEYS.dishes);
+  const stored = await listRecords<Dish & { day?: Dish["day"]; description?: string }>(KEYS.dishes);
   const dishes = await Promise.all(
     stored.map(async (dish) => {
       const next = withDishDay(dish);
@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
 
   const dish: Dish = {
     ...parsed.data,
+    description: parsed.data.description ?? "",
     day: parsed.data.day ?? inferDishDay({ name: parsed.data.name }),
     id: newId(),
     createdAt: Date.now(),
