@@ -44,6 +44,7 @@ export const eventInput = z.object({
 
 export const DISH_CATEGORIES = ["app", "salad", "main", "dessert", "other"] as const;
 export const DISH_LABELS = ["gluten-free", "dairy-free", "vegan", "vegetarian", "paleo"] as const;
+export const DISH_DAYS = ["wednesday", "thursday"] as const;
 
 export const CATEGORY_NAMES: Record<DishCategory, string> = {
   app: "Apps",
@@ -53,11 +54,31 @@ export const CATEGORY_NAMES: Record<DishCategory, string> = {
   other: "Other",
 };
 
+export const DISH_DAY_DETAILS: Record<
+  DishDay,
+  { tab: string; note: string; title: string; blurb: string }
+> = {
+  wednesday: {
+    tab: "Wednesday",
+    note: "Chili cookoff",
+    title: "Chili cookoff",
+    blurb: "Chili, cornbread, and anything else for Wednesday night. Add yours so we can see what's coming.",
+  },
+  thursday: {
+    tab: "Thursday",
+    note: "Potluck",
+    title: "Thanksgiving potluck",
+    blurb: "Everyone's bringing something! Add your dish so we can see what's on the table.",
+  },
+};
+
 export const dishInput = z.object({
   name: z.string().trim().min(1, "Dish name is required").max(120),
   bringer: z.string().trim().min(1, "Tell us who's bringing it").max(120),
   category: z.enum(DISH_CATEGORIES),
   labels: z.array(z.enum(DISH_LABELS)).default([]),
+  /** Omitted by older clients. Callers keep the stored night instead of guessing. */
+  day: z.enum(DISH_DAYS).optional(),
 });
 
 export const RSVP_RESPONSES = ["yes", "maybe", "no"] as const;
@@ -75,12 +96,18 @@ export type DishInput = z.infer<typeof dishInput>;
 export type RsvpInput = z.infer<typeof rsvpInput>;
 export type DishCategory = (typeof DISH_CATEGORIES)[number];
 export type DishLabel = (typeof DISH_LABELS)[number];
+export type DishDay = (typeof DISH_DAYS)[number];
 export type RsvpResponse = (typeof RSVP_RESPONSES)[number];
 
 export type Group = GroupInput & { id: string; lat: number; lng: number };
 export type Place = PlaceInput & { id: string; lat: number; lng: number };
 export type EventItem = EventInput & { id: string };
-export type Dish = DishInput & { id: string; createdAt: number; ownerId: string };
+export type Dish = Omit<DishInput, "day"> & {
+  id: string;
+  createdAt: number;
+  ownerId: string;
+  day: DishDay;
+};
 export type Rsvp = RsvpInput & { id: string; createdAt: number; ownerId: string };
 
 /** By day, then by time; events with no time set yet go last in their day. */

@@ -19,8 +19,8 @@ const TILES = [
   },
   {
     href: "/food",
-    title: "Thanksgiving Potluck",
-    blurb: "See what's on the table and add the dish you're bringing.",
+    title: "Food",
+    blurb: "Chili cookoff Wednesday night, and the Thanksgiving potluck on Thursday.",
     Icon: TurkeyLegIcon,
   },
 ];

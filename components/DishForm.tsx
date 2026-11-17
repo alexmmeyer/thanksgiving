@@ -8,8 +8,11 @@ import { rememberedName, rememberName } from "@/lib/remember";
 import {
   CATEGORY_NAMES,
   DISH_CATEGORIES,
+  DISH_DAY_DETAILS,
+  DISH_DAYS,
   DISH_LABELS,
   type DishCategory,
+  type DishDay,
   type DishLabel,
   type PublicDish,
 } from "@/lib/types";
@@ -19,16 +22,19 @@ import { FormActions, useSubmit } from "./FormActions";
 export function DishForm({
   dish,
   defaultCategory,
+  defaultDay,
   onDone,
 }: {
   dish?: PublicDish;
   defaultCategory: DishCategory;
+  defaultDay: DishDay;
   onDone: (saved?: PublicDish) => void;
 }) {
   const { mutate } = useSWRConfig();
   const { busy, error, run } = useSubmit();
   const [name, setName] = useState(dish?.name ?? "");
   const [bringer, setBringer] = useState(() => dish?.bringer ?? rememberedName());
+  const [day, setDay] = useState<DishDay>(dish?.day ?? defaultDay);
   const [category, setCategory] = useState<DishCategory>(dish?.category ?? defaultCategory);
   const [labels, setLabels] = useState<DishLabel[]>(dish?.labels ?? []);
 
@@ -41,7 +47,7 @@ export function DishForm({
   function save(e: React.FormEvent) {
     e.preventDefault();
     run(async () => {
-      const body = { name, bringer, category, labels };
+      const body = { name, bringer, category, labels, day };
       const saved = dish
         ? await api<PublicDish>(`/api/dishes/${dish.id}`, "PATCH", body)
         : await api<PublicDish>("/api/dishes", "POST", body);
@@ -93,6 +99,35 @@ export function DishForm({
           required
         />
       </div>
+
+      <fieldset>
+        <legend className="field-label">Which night?</legend>
+        <div className="grid grid-cols-2 gap-2">
+          {DISH_DAYS.map((option) => (
+            <label
+              key={option}
+              className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border-2 px-3 ${
+                day === option ? "border-navy bg-navy text-cream" : "border-navy/20 bg-white"
+              }`}
+            >
+              <input
+                type="radio"
+                name="day"
+                value={option}
+                checked={day === option}
+                onChange={() => setDay(option)}
+                className="size-5 accent-turquoise"
+              />
+              <span>
+                <span className="block leading-tight">{DISH_DAY_DETAILS[option].tab}</span>
+                <span className={`block text-sm leading-tight ${day === option ? "text-cream/75" : "text-navy/60"}`}>
+                  {DISH_DAY_DETAILS[option].note}
+                </span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <fieldset>
         <legend className="field-label">Category</legend>

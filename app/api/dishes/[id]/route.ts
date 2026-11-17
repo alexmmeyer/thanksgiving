@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { canEdit, toPublic } from "@/lib/auth";
 import { forbidden, notFound, readBody } from "@/lib/http";
 import { deleteRecord, getRecord, KEYS, putRecord } from "@/lib/redis";
+import { inferDishDay } from "@/lib/dishes";
 import { dishInput, type Dish } from "@/lib/types";
 
 export async function PATCH(req: NextRequest, ctx: RouteContext<"/api/dishes/[id]">) {
@@ -12,7 +13,11 @@ export async function PATCH(req: NextRequest, ctx: RouteContext<"/api/dishes/[id
 
   const parsed = await readBody(req, dishInput);
   if (!parsed.ok) return parsed.response;
-  const dish: Dish = { ...existing, ...parsed.data };
+  const dish: Dish = {
+    ...existing,
+    ...parsed.data,
+    day: parsed.data.day ?? inferDishDay(existing),
+  };
   await putRecord(KEYS.dishes, dish);
   return NextResponse.json(toPublic(req, dish));
 }
